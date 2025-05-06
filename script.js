@@ -1,6 +1,12 @@
+// Seleccion de los elementos del DOM
+const inputTarea = document.getElementById("nueva-tarea");
+const listaTareas = document.getElementById("lista-tareas");
+const botonAgregar = document.getElementById("agregar-btn");
+
+botonAgregar.addEventListener("click", agregarTarea);
+
 function agregarTarea() {
-  const input = document.getElementById("nueva-tarea");
-  const texto = input.value.trim();
+  const texto = inputTarea.value.trim();
   if (texto !== "") {
     const li = document.createElement("li");
     li.textContent = texto;
@@ -18,9 +24,9 @@ function agregarTarea() {
 
     li.onclick = () => li.classList.toggle("completada");
 
-    document.getElementById("lista-tareas").appendChild(li);
+    listaTareas.appendChild(li);
 
-    input.value = "";
+    inputTarea.value = "";
   }
 }
 
@@ -41,4 +47,18 @@ function editarTarea(li) {
       guardarEdicion(inputEdit, li, textoOriginal);
     }
   });
+}
+
+function guardarEdicion(inputEdit, li, textoOriginal) {
+  const nuevoTexto = inputEdit.value.trim();
+  if (nuevoTexto !== "") {
+    li.firstChild.textContent = nuevoTexto;
+  } else {
+    li.firstChild.textContent = textoOriginal; 
+  }
+
+  const eliminarBtn = li.querySelector("button");
+  const editarBtn = li.querySelectorAll("button")[1]; 
+  li.appendChild(eliminarBtn);
+  li.appendChild(editarBtn);
 }
