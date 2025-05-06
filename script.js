@@ -5,15 +5,13 @@ function agregarTarea() {
     const li = document.createElement("li");
     li.textContent = texto;
 
-    // Crear el botón de eliminar
     const eliminarBtn = document.createElement("button");
     eliminarBtn.textContent = "Eliminar";
     eliminarBtn.onclick = () => li.remove(); 
 
-    // Crear el botón de editar
     const editarBtn = document.createElement("button");
     editarBtn.textContent = "Editar";
-    editarBtn.onclick = () => editarTarea(li); // Función que edita la tarea
+    editarBtn.onclick = () => editarTarea(li); 
 
     li.appendChild(eliminarBtn);
     li.appendChild(editarBtn);
@@ -24,4 +22,23 @@ function agregarTarea() {
 
     input.value = "";
   }
+}
+
+function editarTarea(li) {
+  const textoOriginal = li.firstChild.textContent;
+
+  const inputEdit = document.createElement("input");
+  inputEdit.type = "text";
+  inputEdit.value = textoOriginal;
+
+  li.firstChild.textContent = "";
+  li.firstChild.appendChild(inputEdit);
+  inputEdit.focus(); 
+
+  inputEdit.addEventListener("blur", () => guardarEdicion(inputEdit, li, textoOriginal));
+  inputEdit.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      guardarEdicion(inputEdit, li, textoOriginal);
+    }
+  });
 }
