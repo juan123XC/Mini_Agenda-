@@ -91,3 +91,25 @@ footer {
   color: gray;
   margin-top: 30px;
 }
+/* 🎯 Animación suave para inputs */
+input[type="text"],
+input[type="date"] {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+/* 🎯 Animación al presionar el botón */
+button {
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+button:active {
+  transform: scale(0.97);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) inset;
+}
+
