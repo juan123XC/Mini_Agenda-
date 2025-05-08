@@ -129,3 +129,50 @@ li.completada {
 .btn-eliminar:hover {
   background-color: #c0392b;
 }
+/* 🌐 Responsive para móviles */
+@media (max-width: 480px) {
+  body {
+    padding: 20px 10px;
+    align-items: flex-start;
+  }
+
+  .container {
+    padding: 20px 15px;
+    border-radius: 10px;
+  }
+
+  .titulo-agenda {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+  }
+
+  button {
+    width: 100%;
+    margin: 0;
+    margin-top: 10px;
+  }
+
+  li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .acciones-tarea {
+    flex-direction: row;
+    gap: 10px;
+    margin-top: 10px;
+    align-self: flex-end;
+  }
+
+  .btn-editar,
+  .btn-eliminar {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+  }
+}
