@@ -129,3 +129,12 @@ li.completada {
 .btn-eliminar:hover {
   background-color: #c0392b;
 }
+
+function agregarTarea() {
+    const texto = inputTarea.value.trim();
+    if (texto) {
+        crearElementoTarea(texto, false);
+        guardarTareas();
+        inputTarea.value = '';
+    }
+}
