@@ -1,149 +1,113 @@
 const inputTarea = document.getElementById("nueva-tarea");
 const listaTareas = document.getElementById("lista-tareas");
 const botonAgregar = document.querySelector(".btn-agregar");
-const fechaTarea = document.getElementById("fecha-tarea");
-let calendar;
 
-document.addEventListener("DOMContentLoaded", () => {
-  const calendarEl = document.getElementById("calendar");
-  calendar = new FullCalendar.Calendar(calendarEl, {
-    initialView: "dayGridMonth",
-    locale: "es",
-    headerToolbar: {
-      left: "prev,next today",
-      center: "title",
-      right: "dayGridMonth,timeGridWeek,timeGridDay"
-    },
-    events: []
-  });
-  calendar.render();
-});
+window.addEventListener("DOMContentLoaded", cargarTareas);
 
 botonAgregar.addEventListener("click", agregarTarea);
+
 inputTarea.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") agregarTarea();
+  if (e.key === "Enter") {
+    agregarTarea(); // Llamamos a la función fuera del event listener
+  }
 });
 
 function agregarTarea() {
   const texto = inputTarea.value.trim();
-  const fecha = fechaTarea.value;
-
-  if (texto === "" || fecha === "") {
-    alert("Por favor, completa la tarea y la fecha.");
-    return;
+  if (texto !== "") {
+    const tarea = { texto: texto, completada: false };
+    const tareas = obtenerTareas();
+    tareas.push(tarea);
+    guardarTareas(tareas);
+    renderizarTareas();
+    inputTarea.value = "";
   }
-
-  const li = document.createElement("li");
-  const spanTexto = document.createElement("span");
-  spanTexto.textContent = texto;
-
-  const spanFecha = document.createElement("span");
-  spanFecha.textContent = `📅 ${fecha}`;
-  spanFecha.style.fontSize = "0.8rem";
-  spanFecha.style.color = "#6b7280";
-
-  const eliminarBtn = document.createElement("button");
-  eliminarBtn.textContent = "🗑️";
-  eliminarBtn.className = "btn-eliminar";
-  eliminarBtn.onclick = () => li.remove();
-
-  const editarBtn = document.createElement("button");
-  editarBtn.textContent = "✏️";
-  editarBtn.className = "btn-editar";
-
-  const botonesDiv = document.createElement("div");
-  botonesDiv.className = "acciones-tarea";
-  botonesDiv.appendChild(editarBtn);
-  botonesDiv.appendChild(eliminarBtn);
-
-  const infoDiv = document.createElement("div");
-  infoDiv.appendChild(spanTexto);
-  infoDiv.appendChild(spanFecha);
-  infoDiv.style.display = "flex";
-  infoDiv.style.flexDirection = "column";
-  infoDiv.style.gap = "5px";
-
-  li.appendChild(infoDiv);
-  li.appendChild(botonesDiv);
-
-  // Tachar tarea y desactivar edición
-  li.onclick = (e) => {
-    if (e.target === li || e.target === spanTexto) {
-      li.classList.toggle("completada");
-      editarBtn.disabled = li.classList.contains("completada");
-      editarBtn.style.opacity = editarBtn.disabled ? "0.4" : "1";
-      editarBtn.style.cursor = editarBtn.disabled ? "not-allowed" : "pointer";
-    }
-  };
-
-  // Función de editar si no está tachada
-  editarBtn.onclick = () => {
-    if (!li.classList.contains("completada")) {
-      editarTarea(spanTexto, spanFecha);
-    }
-  };
-
-  listaTareas.appendChild(li);
-
-  // Agregar evento al calendario
-  if (calendar) {
-    calendar.addEvent({
-      title: texto,
-      start: fecha,
-      allDay: true
-    });
-  }
-
-  inputTarea.value = "";
-  fechaTarea.value = "";
 }
 
-function editarTarea(spanTexto, spanFecha) {
-  const textoOriginal = spanTexto.textContent;
-  const fechaOriginal = spanFecha.textContent.replace("📅 ", "");
+function renderizarTareas() {
+  listaTareas.innerHTML = "";
+  const tareas = obtenerTareas();
+  tareas.forEach((tarea, index) => {
+    const li = document.createElement("li");
+    if (tarea.completada) {
+      li.classList.add("completada");
+    }
 
-  const inputNuevoTexto = document.createElement("input");
-  inputNuevoTexto.type = "text";
-  inputNuevoTexto.value = textoOriginal;
+    const spanTexto = document.createElement("span");
+    spanTexto.textContent = tarea.texto;
 
-  const inputNuevaFecha = document.createElement("input");
-  inputNuevaFecha.type = "date";
-  inputNuevaFecha.value = fechaOriginal;
+    const eliminarBtn = document.createElement("button");
+    eliminarBtn.textContent = "🗑️";
+    eliminarBtn.className = "btn-eliminar";
+    eliminarBtn.onclick = () => {
+      tareas.splice(index, 1);
+      guardarTareas(tareas);
+      renderizarTareas();
+    };
 
-  const contenedor = spanTexto.parentElement;
-  contenedor.innerHTML = "";
-  contenedor.appendChild(inputNuevoTexto);
-  contenedor.appendChild(inputNuevaFecha);
+    const editarBtn = document.createElement("button");
+    editarBtn.textContent = "✏️";
+    editarBtn.className = "btn-editar";
+    editarBtn.onclick = () => editarTarea(spanTexto, index);
 
-  inputNuevoTexto.focus();
+    const botonesDiv = document.createElement("div");
+    botonesDiv.className = "acciones-tarea";
+    botonesDiv.appendChild(editarBtn);
+    botonesDiv.appendChild(eliminarBtn);
 
-  inputNuevaFecha.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") guardarEdicion(inputNuevoTexto, inputNuevaFecha, contenedor);
-  });
+    li.appendChild(spanTexto);
+    li.appendChild(botonesDiv);
 
-  inputNuevaFecha.addEventListener("blur", () => {
-    guardarEdicion(inputNuevoTexto, inputNuevaFecha, contenedor);
+    li.onclick = (e) => {
+      if (e.target === li || e.target === spanTexto) {
+        tarea.completada = !tarea.completada;
+        guardarTareas(tareas);
+        renderizarTareas();
+      }
+    };
+
+    listaTareas.appendChild(li);
   });
 }
 
-function guardarEdicion(inputTexto, inputFecha, contenedor) {
-  const nuevoTexto = inputTexto.value.trim();
-  const nuevaFecha = inputFecha.value;
+function editarTarea(span, index) {
+  const textoOriginal = span.textContent;
 
-  if (nuevoTexto === "" || nuevaFecha === "") {
-    alert("Ambos campos deben estar completos.");
-    return;
+  const inputEdit = document.createElement("input");
+  inputEdit.type = "text";
+  inputEdit.value = textoOriginal;
+  span.replaceWith(inputEdit);
+  inputEdit.focus();
+
+  inputEdit.addEventListener("blur", () => guardarEdicion(inputEdit, index));
+  inputEdit.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      guardarEdicion(inputEdit, index);
+    }
+  });
+}
+
+function guardarEdicion(inputEdit, index) {
+  const tareas = obtenerTareas();
+  const nuevoTexto = inputEdit.value.trim();
+  if (nuevoTexto !== "") {
+    tareas[index].texto = nuevoTexto;
+    guardarTareas(tareas);
+    renderizarTareas();
+  } else {
+    renderizarTareas();
   }
+}
 
-  const nuevoSpanTexto = document.createElement("span");
-  nuevoSpanTexto.textContent = nuevoTexto;
+function guardarTareas(tareas) {
+  localStorage.setItem("tareas", JSON.stringify(tareas));
+}
 
-  const nuevoSpanFecha = document.createElement("span");
-  nuevoSpanFecha.textContent = `📅 ${nuevaFecha}`;
-  nuevoSpanFecha.style.fontSize = "0.8rem";
-  nuevoSpanFecha.style.color = "#6b7280";
+function obtenerTareas() {
+  const tareasGuardadas = localStorage.getItem("tareas");
+  return tareasGuardadas ? JSON.parse(tareasGuardadas) : [];
+}
 
-  contenedor.innerHTML = "";
-  contenedor.appendChild(nuevoSpanTexto);
-  contenedor.appendChild(nuevoSpanFecha);
+function cargarTareas() {
+  renderizarTareas();
 }
