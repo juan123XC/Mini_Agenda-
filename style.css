@@ -5,7 +5,9 @@ body {
   padding: 40px 20px;
   display: flex;
   justify-content: center;
+  color: #2d3748;
 }
+
 .container {
   background: white;
   padding: 30px;
@@ -14,98 +16,59 @@ body {
   width: 100%;
   box-shadow: 0 10px 24px rgba(0,0,0,0.1);
 }
+
 .titulo-agenda {
   text-align: center;
-  color: #2d3748;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
 }
+
 fieldset {
   border: 1px solid #cbd5e0;
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 20px;
 }
-input[type="text"], input[type="date"] {
+
+fieldset label {
+  display: block;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+input[type="text"], input[type="date"], select {
   width: 100%;
   padding: 10px;
   margin-top: 5px;
-  margin-bottom: 15px;
   border: 1px solid #cbd5e0;
   border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
 }
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+  outline: none;
+}
+
 button {
   background-color: #3b82f6;
   color: white;
   border: none;
   padding: 10px;
   width: 100%;
+  margin-top: 15px;
   border-radius: 6px;
   cursor: pointer;
   font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.1s ease;
 }
+
 button:hover {
   background-color: #2563eb;
-}
-ul {
-  list-style: none;
-  padding: 0;
-}
-li {
-  background: #f9fafb;
-  border-radius: 8px;
-  padding: 12px;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-li.completada {
-  text-decoration: line-through;
-  background: #e2e8f0;
-  color: #4a5568;
-}
-.acciones-tarea {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.btn-editar {
-  background-color: #facc15;
-  border: none;
-  padding: 5px 8px;
-  color: #1f2937;
-  border-radius: 5px;
-}
-.btn-eliminar {
-  background-color: #ef4444;
-  border: none;
-  padding: 5px 8px;
-  color: white;
-  border-radius: 5px;
-}
-#calendar {
-  margin-top: 30px;
-}
-footer {
-  text-align: center;
-  font-size: 0.85rem;
-  color: gray;
-  margin-top: 30px;
-}
-/* 🎯 Animación suave para inputs */
-input[type="text"],
-input[type="date"] {
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-input[type="text"]:focus,
-input[type="date"]:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
-}
-
-/* 🎯 Animación al presionar el botón */
-button {
-  transition: background-color 0.3s ease, transform 0.1s ease;
 }
 
 button:active {
@@ -113,3 +76,117 @@ button:active {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) inset;
 }
 
+.lista-agenda h2 {
+  margin-bottom: 10px;
+  color: #1a202c;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-left: 5px solid gray;
+  transition: all 0.3s ease;
+  flex-wrap: wrap;
+}
+
+li.completada {
+  text-decoration: line-through;
+  background: #e2e8f0;
+  color: #4a5568;
+}
+
+li.editando {
+  background-color: #e0f2fe;
+  border-left: 5px solid #3b82f6;
+}
+
+.acciones-tarea {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+  margin-top: 10px;
+}
+
+.btn-editar {
+  background-color: #facc15;
+  border: none;
+  padding: 5px 8px;
+  color: #1f2937;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.btn-eliminar {
+  background-color: #ef4444;
+  border: none;
+  padding: 5px 8px;
+  color: white;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.btn-guardar {
+  background-color: #10b981;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin-top: 10px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.btn-guardar:hover {
+  background-color: #059669;
+}
+
+.input-edicion,
+.select-edicion {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.fecha-tarea {
+  font-size: 0.9rem;
+  color: #4b5563;
+  background-color: #f3f4f6;
+  padding: 3px 8px;
+  border-radius: 6px;
+  margin-left: 8px;
+}
+
+li span {
+  font-size: 1rem;
+  padding: 2px 6px;
+  border-radius: 6px;
+  display: inline-block;
+  margin-top: 4px;
+}
+
+#calendar {
+  margin-top: 30px;
+}
+
+footer {
+  text-align: center;
+  font-size: 0.85rem;
+  color: gray;
+  margin-top: 30px;
+}

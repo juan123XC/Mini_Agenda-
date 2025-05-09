@@ -17,6 +17,7 @@
       <section class="formulario-agenda">
         <fieldset>
           <legend>Agregar nueva tarea</legend>
+          
           <label for="nueva-tarea">Tarea:</label>
           <input type="text" id="nueva-tarea" placeholder="Escribe tu próxima tarea aquí..." />
           
@@ -30,12 +31,16 @@
             <option value="baja">Baja 🟢</option>
           </select>
           
-          <button onclick="agregarTarea()" class="btn-agregar">Agregar</button>
+          <!-- ✅ Sin onclick, solo con clase -->
+          <button type="button" class="btn-agregar">Agregar</button>
         </fieldset>
       </section>
+
       <section class="lista-agenda">
+        <h2>📋 Lista de Tareas</h2>
         <ul id="lista-tareas" aria-live="polite"></ul>
       </section>
+
       <section id="calendario">
         <h2>📅 Calendario</h2>
         <div id="calendar"></div>
@@ -45,6 +50,7 @@
       <p>&copy; 2025 | Agenda creada por PIXEL PIONEERS</p>
     </footer>
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
   <script src="script.js"></script>
 </body>
