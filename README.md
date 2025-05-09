@@ -1,10 +1,10 @@
 # 📝 **Mini Proyecto - Mini-agenda**
 
 ## 👥 Equipo:
-- **Gustavo**
-- **Juan**
-- **Paul**
-- **Jhoel**
+1. Luis Gustavo Mamani Mosquera 
+2. Jhoel Fernando Quelca Ledezma
+3. Paul Choconi Mamani
+4. Juan Manuel Torrez Churqui
 
 ## 🔄 GitFlow Utilizado:
 Usamos **GitFlow** para organizar el flujo de trabajo. Las ramas principales fueron:
