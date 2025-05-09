@@ -8,9 +8,11 @@ botonAgregar.addEventListener("click", agregarTarea);
 
 inputTarea.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
-    agregarTarea();
+    agregarTarea(); // Llamamos a la función fuera del event listener
+  }
+});
 
-  function agregarTarea() {  
+function agregarTarea() {
   const texto = inputTarea.value.trim();
   if (texto !== "") {
     const tarea = { texto: texto, completada: false };
@@ -108,5 +110,24 @@ function obtenerTareas() {
 
 function cargarTareas() {
   renderizarTareas();
+  if (nuevoTexto !== "") {
+    tareas[index].texto = nuevoTexto;
+    guardarTareas(tareas);
+    renderizarTareas();
+  } else {
+    renderizarTareas();
+  }
 }
 
+function guardarTareas(tareas) {
+  localStorage.setItem("tareas", JSON.stringify(tareas));
+}
+
+function obtenerTareas() {
+  const tareasGuardadas = localStorage.getItem("tareas");
+  return tareasGuardadas ? JSON.parse(tareasGuardadas) : [];
+}
+
+function cargarTareas() {
+  renderizarTareas();
+}
