@@ -1,6 +1,7 @@
 const inputTarea = document.getElementById("nueva-tarea");
 const listaTareas = document.getElementById("lista-tareas");
 const botonAgregar = document.querySelector(".btn-agregar");
+const prioridadSelect = document.getElementById("prioridad");
 
 window.addEventListener("DOMContentLoaded", cargarTareas);
 
@@ -8,14 +9,16 @@ botonAgregar.addEventListener("click", agregarTarea);
 
 inputTarea.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
-    agregarTarea(); // Llamamos a la función fuera del event listener
+    agregarTarea();
   }
 });
 
 function agregarTarea() {
   const texto = inputTarea.value.trim();
+  const prioridad = prioridadSelect.value;
+
   if (texto !== "") {
-    const tarea = { texto: texto, completada: false };
+    const tarea = { texto: texto, completada: false, prioridad: prioridad };
     const tareas = obtenerTareas();
     tareas.push(tarea);
     guardarTareas(tareas);
@@ -35,6 +38,20 @@ function renderizarTareas() {
 
     const spanTexto = document.createElement("span");
     spanTexto.textContent = tarea.texto;
+
+    const prioridadIcono = document.createElement("span");
+    if (tarea.prioridad === "alta") {
+      prioridadIcono.textContent = "🔴";
+      li.style.borderLeft = "5px solid red";
+    } else if (tarea.prioridad === "media") {
+      prioridadIcono.textContent = "🟡";
+      li.style.borderLeft = "5px solid yellow";
+    } else {
+      prioridadIcono.textContent = "🟢";
+      li.style.borderLeft = "5px solid green";
+    }
+
+    li.prepend(prioridadIcono);
 
     const eliminarBtn = document.createElement("button");
     eliminarBtn.textContent = "🗑️";

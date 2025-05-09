@@ -19,8 +19,17 @@
           <legend>Agregar nueva tarea</legend>
           <label for="nueva-tarea">Tarea:</label>
           <input type="text" id="nueva-tarea" placeholder="Escribe tu próxima tarea aquí..." />
+          
           <label for="fecha-tarea">Fecha:</label>
           <input type="date" id="fecha-tarea" />
+          
+          <label for="prioridad">Prioridad:</label>
+          <select id="prioridad">
+            <option value="alta">Alta 🔴</option>
+            <option value="media">Media 🟡</option>
+            <option value="baja">Baja 🟢</option>
+          </select>
+          
           <button onclick="agregarTarea()" class="btn-agregar">Agregar</button>
         </fieldset>
       </section>
