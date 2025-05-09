@@ -1,4 +1,4 @@
-# 📝 **Mini Proyecto - **Mini-agenda**
+# 📝 **Mini Proyecto - Mini-agenda**
 
 ## 👥 Equipo:
 - **Gustavo**
@@ -20,6 +20,8 @@ Durante el proyecto, el flujo de trabajo con GitFlow nos ayudó a:
 ### 🛠Desafíos:
 - **Conflictos**: Hubo conflictos al trabajar en las mismas áreas de código, como estilos CSS, lo que nos obligó a mejorar nuestra comunicación.
 - **Problemas comunes**: Realización de commits grandes que dificultaron las revisiones.
+- **PR**.- Hubo algunas problemas con lo PR y el main
+- **Issues**.- Revisarlo, mas facil era entrar al whatsaap pero lo hicimos con algunso issues 
 
 ## ✅Buenas Prácticas:
 - **Comentarios claros** y bien organizados en el código.
