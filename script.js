@@ -1,36 +1,52 @@
-// Selección de los elementos del DOM
 const inputTarea = document.getElementById("nueva-tarea");
 const listaTareas = document.getElementById("lista-tareas");
 const botonAgregar = document.querySelector(".btn-agregar");
 
-// Evento al hacer clic en el botón
+window.addEventListener("DOMContentLoaded", cargarTareas);
+
 botonAgregar.addEventListener("click", agregarTarea);
 
-// Evento para agregar tarea con tecla Enter
 inputTarea.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
     agregarTarea();
-  }
-});
 
-// Función para agregar nueva tarea
-function agregarTarea() {
+  function agregarTarea() {  
   const texto = inputTarea.value.trim();
   if (texto !== "") {
+    const tarea = { texto: texto, completada: false };
+    const tareas = obtenerTareas();
+    tareas.push(tarea);
+    guardarTareas(tareas);
+    renderizarTareas();
+    inputTarea.value = "";
+  }
+}
+
+function renderizarTareas() {
+  listaTareas.innerHTML = "";
+  const tareas = obtenerTareas();
+  tareas.forEach((tarea, index) => {
     const li = document.createElement("li");
+    if (tarea.completada) {
+      li.classList.add("completada");
+    }
 
     const spanTexto = document.createElement("span");
-    spanTexto.textContent = texto;
+    spanTexto.textContent = tarea.texto;
 
     const eliminarBtn = document.createElement("button");
     eliminarBtn.textContent = "🗑️";
     eliminarBtn.className = "btn-eliminar";
-    eliminarBtn.onclick = () => li.remove();
+    eliminarBtn.onclick = () => {
+      tareas.splice(index, 1);
+      guardarTareas(tareas);
+      renderizarTareas();
+    };
 
     const editarBtn = document.createElement("button");
     editarBtn.textContent = "✏️";
     editarBtn.className = "btn-editar";
-    editarBtn.onclick = () => editarTarea(spanTexto);
+    editarBtn.onclick = () => editarTarea(spanTexto, index);
 
     const botonesDiv = document.createElement("div");
     botonesDiv.className = "acciones-tarea";
@@ -42,17 +58,17 @@ function agregarTarea() {
 
     li.onclick = (e) => {
       if (e.target === li || e.target === spanTexto) {
-        li.classList.toggle("completada");
+        tarea.completada = !tarea.completada;
+        guardarTareas(tareas);
+        renderizarTareas();
       }
     };
 
     listaTareas.appendChild(li);
-    inputTarea.value = "";
-  }
+  });
 }
 
-// Función para editar una tarea
-function editarTarea(span) {
+function editarTarea(span, index) {
   const textoOriginal = span.textContent;
 
   const inputEdit = document.createElement("input");
@@ -61,17 +77,36 @@ function editarTarea(span) {
   span.replaceWith(inputEdit);
   inputEdit.focus();
 
-  inputEdit.addEventListener("blur", () => guardarEdicion(inputEdit, span));
+  inputEdit.addEventListener("blur", () => guardarEdicion(inputEdit, index));
   inputEdit.addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
-      guardarEdicion(inputEdit, span);
+      guardarEdicion(inputEdit, index);
     }
   });
 }
 
-// Guardar el nuevo texto editado
-function guardarEdicion(inputEdit, span) {
+function guardarEdicion(inputEdit, index) {
+  const tareas = obtenerTareas();
   const nuevoTexto = inputEdit.value.trim();
-  span.textContent = nuevoTexto !== "" ? nuevoTexto : span.textContent;
-  inputEdit.replaceWith(span);
+  if (nuevoTexto !== "") {
+    tareas[index].texto = nuevoTexto;
+    guardarTareas(tareas);
+    renderizarTareas();
+  } else {
+    renderizarTareas();
+  }
 }
+
+function guardarTareas(tareas) {
+  localStorage.setItem("tareas", JSON.stringify(tareas));
+}
+
+function obtenerTareas() {
+  const tareasGuardadas = localStorage.getItem("tareas");
+  return tareasGuardadas ? JSON.parse(tareasGuardadas) : [];
+}
+
+function cargarTareas() {
+  renderizarTareas();
+}
+
